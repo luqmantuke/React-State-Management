@@ -1,7 +1,26 @@
 import { useReducer } from 'react'
 
 
-function App() {
+function UseForm() {
+  const [state, dispatch] = useReducer((state,action)=>({
+    ...state,...action
+  }),{
+    first: "",
+    last: "",
+  })
+  return (
+    <div>
+      <input type="text" value={state.first} onChange={(e)=> dispatch({first: e.target.value})} />
+      <input type="text" value={state.last} onChange={(e)=> dispatch({last: e.target.value})} />
+      <div>
+        <div>First: {state.first}</div>
+        <div>Last: {state.last}</div>
+      </div>
+    </div>
+  )
+}
+
+function NameList() {
   const [state, dispatch] = useReducer((state,action)=>{
     switch (action.type) {
       case "SET_NAME":
@@ -28,6 +47,17 @@ console.log(name)
 
      <button onClick={()=> dispatch({type: "ADD_NAME",})}>Add Name</button>
     </div>
+  )
+}
+
+function App() {
+  return (
+ <div>
+
+   <UseForm />
+   <NameList />
+ </div>
+
   )
 }
 
