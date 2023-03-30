@@ -1,5 +1,15 @@
 import { useState,useEffect } from 'react'
 
+function StopWatch(){
+  const [time, settime] = useState(0)
+  useEffect(() => {
+  setInterval(() => {
+    settime((time)=>time+1)
+  }, 1000);
+  }, [])
+  
+  return <div>Time: {time}</div>
+}
 
 function App() {
   const [names, setnames] = useState([])
@@ -7,21 +17,22 @@ function App() {
     fetch("/names.json").then((response)=>response.json()).then((data)=>setnames(data))
    
   }, [])
-  const [selectedName, setselectedName] = useState(null)
   const [selectedNameDetails, setselectedNameDetails] = useState(null)
 
-  useEffect(() => {
-    fetch(`/${selectedName}.json`).then((data)=>setselectedNameDetails(data))
-  }, [selectedName])
-  console.log({selectedNameDetails})
+  const onSelectedNameChange = (name)=>{
+    fetch(`/${name}.json`).then((response)=>response.json()).then((data)=>setselectedNameDetails(data))
+  
+  }
+  
 
   return (
     <div className="App">
-    <div>Selected Name: {selectedName}</div>
+      <StopWatch />
       <div>
-        {names.map((name,index)=>(<button onClick={()=>setselectedName(name)} key={index}>{name}</button>))}
+        {names.map((name,index)=>(<button onClick={()=>onSelectedNameChange(name)} key={index}>{name}</button>))}
       </div>
       <div>
+        
         {JSON.stringify(selectedNameDetails)}
       </div>
     </div>
